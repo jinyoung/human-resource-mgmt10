@@ -10,5 +10,5 @@ import org.axonframework.modelling.command.TargetAggregateIdentifier;
 public class RegisterCalendarCommand {
 
     private String userId; // Please comment here if you want user to enter the id directly
-    private List<Event> events;
+    //private List<Event> events;
 }
