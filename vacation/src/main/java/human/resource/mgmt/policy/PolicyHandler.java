@@ -30,6 +30,9 @@ public class PolicyHandler {
         System.out.println(vacationRegistered.toString());
 
         UseCommand command = new UseCommand();
+        command.setDayCount(vacationRegistered.getDays());
+        command.setUserId(vacationRegistered.getUserId() + "_cal");
+        command.setReason(vacationRegistered.getReason());
         //TODO: mapping attributes (anti-corruption)
         commandGateway.send(command);
     }
@@ -67,6 +70,7 @@ public class PolicyHandler {
 
         RegisterUserCommand command = new RegisterUserCommand();
         //TODO: mapping attributes (anti-corruption)
+        command.setUserId(employeeJoined.getUserId()+ "_cal");
         commandGateway.send(command);
     }
 }

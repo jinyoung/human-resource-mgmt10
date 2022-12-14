@@ -48,7 +48,10 @@ public class VacationDaysLeftAggregate {
         VacationDaysIntializedEvent event = new VacationDaysIntializedEvent();
         BeanUtils.copyProperties(command, event);
 
-        event.setUserId(createUUID());
+        //TODO: check key generation is properly done
+        if (event.getUserId() == null) event.setUserId(createUUID());
+        
+        event.setDayCount(10);
 
         apply(event);
     }

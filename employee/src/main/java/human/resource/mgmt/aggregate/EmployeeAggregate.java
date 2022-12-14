@@ -33,7 +33,8 @@ public class EmployeeAggregate {
         EmployeeJoinedEvent event = new EmployeeJoinedEvent();
         BeanUtils.copyProperties(command, event);
 
-        event.setUserId(createUUID());
+        if(event.getUserId()==null)
+            event.setUserId(createUUID());
 
         apply(event);
     }
