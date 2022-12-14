@@ -69,7 +69,12 @@ public class VacationAggregate {
     }
 
     @CommandHandler
-    public void handle(UpdateCommand command) {}
+    public void handle(UpdateCommand command) {
+        VacationRejectedEvent event = new VacationRejectedEvent();
+        BeanUtils.copyProperties(command, event);
+
+        apply(event);
+    }
 
     private String createUUID() {
         return UUID.randomUUID().toString();
