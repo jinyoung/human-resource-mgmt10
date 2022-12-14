@@ -30,6 +30,7 @@ public class PolicyHandler {
         System.out.println(vacationRegistered.toString());
 
         UseCommand command = new UseCommand();
+        //TODO: mapping attributes (anti-corruption)
         commandGateway.send(command);
     }
 
@@ -41,6 +42,7 @@ public class PolicyHandler {
         System.out.println(vacationCancelled.toString());
 
         AddCommand command = new AddCommand();
+        //TODO: mapping attributes (anti-corruption)
         commandGateway.send(command);
     }
 
@@ -52,6 +54,7 @@ public class PolicyHandler {
         System.out.println(vacationRejected.toString());
 
         AddCommand command = new AddCommand();
+        //TODO: mapping attributes (anti-corruption)
         commandGateway.send(command);
     }
 
@@ -63,6 +66,7 @@ public class PolicyHandler {
         System.out.println(employeeJoined.toString());
 
         RegisterUserCommand command = new RegisterUserCommand();
+        //TODO: mapping attributes (anti-corruption)
         commandGateway.send(command);
     }
 }

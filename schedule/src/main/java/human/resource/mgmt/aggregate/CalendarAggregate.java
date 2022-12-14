@@ -58,13 +58,21 @@ public class CalendarAggregate {
     }
 
     @EventSourcingHandler
-    public void on(ScheduleAddedEvent event) {}
+    public void on(ScheduleAddedEvent event) {
+        //TODO: business logic here
+
+    }
 
     @EventSourcingHandler
-    public void on(ScheduleCanceledEvent event) {}
+    public void on(ScheduleCanceledEvent event) {
+        //TODO: business logic here
+
+    }
 
     @EventSourcingHandler
     public void on(CalendarRegisteredEvent event) {
         BeanUtils.copyProperties(event, this);
+        //TODO: business logic here
+
     }
 }

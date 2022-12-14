@@ -53,8 +53,13 @@ public class EmployeeAggregate {
     @EventSourcingHandler
     public void on(EmployeeJoinedEvent event) {
         BeanUtils.copyProperties(event, this);
+        //TODO: business logic here
+
     }
 
     @EventSourcingHandler
-    public void on(EmployeeResignedEvent event) {}
+    public void on(EmployeeResignedEvent event) {
+        //TODO: business logic here
+
+    }
 }
