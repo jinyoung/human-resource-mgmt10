@@ -1,0 +1,40 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+
+---
+
+spring:
+  profiles: default
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: update
+    properties:
+      hibernate:
+        #show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL57Dialect
+  datasource:
+    url: jdbc:mysql://${DOCKER_HOST_IP:localhost}/vacation_db?createDatabaseIfNotExist=true
+    username: root
+    password: rootpassword
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  rsocket:
+    server:
+      mapping-path: /rsocket/vacations
+      transport: websocket
+      port: 7081
+
+server:
+  port: 8081
+
+---
+
+spring:
+  profiles: docker
+
+
