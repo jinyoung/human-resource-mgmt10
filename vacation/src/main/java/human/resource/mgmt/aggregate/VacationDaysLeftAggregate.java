@@ -76,4 +76,10 @@ public class VacationDaysLeftAggregate {
         //TODO: business logic here
 
     }
+
+    @EventSourcingHandler
+    public void on(VacationDaysInsufficientEvent event) {
+        //TODO: business logic here
+
+    }
 }

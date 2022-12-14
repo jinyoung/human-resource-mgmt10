@@ -8,6 +8,7 @@
         <v-card-text>
             <Number label="DayCount" v-model="value.dayCount" :editMode="editMode"/>
             <String label="Reason" v-model="value.reason" :editMode="editMode"/>
+            <String label="VacationId" v-model="value.vacationId" :editMode="editMode"/>
         </v-card-text>
 
         <v-card-actions>
@@ -45,6 +46,7 @@
         created() {
             this.value.dayCount = 0;
             this.value.reason = '';
+            this.value.vacationId = '';
         },
         watch: {
         },
