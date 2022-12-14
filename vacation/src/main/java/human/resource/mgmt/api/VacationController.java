@@ -100,22 +100,18 @@ public class VacationController {
         return commandGateway.send(confirmUsedCommand);
     }
 
-    @RequestMapping(value = "/vacations", method = RequestMethod.POST)
-    public CompletableFuture update(@RequestBody UpdateCommand updateCommand)
+    @RequestMapping(
+        value = "/vacations/{id}/update",
+        method = RequestMethod.PUT,
+        produces = "application/json;charset=UTF-8"
+    )
+    public CompletableFuture update(@PathVariable("id") String id)
         throws Exception {
         System.out.println("##### /vacation/update  called #####");
-
+        UpdateCommand updateCommand = new UpdateCommand();
+        updateCommand.setId(id);
         // send command
-        return commandGateway
-            .send(updateCommand)
-            .thenApply(id -> {
-                VacationAggregate resource = new VacationAggregate();
-                BeanUtils.copyProperties(updateCommand, resource);
-
-                resource.setId((String) id);
-
-                return new ResponseEntity<>(hateoas(resource), HttpStatus.OK);
-            });
+        return commandGateway.send(updateCommand);
     }
 
     @Autowired
@@ -154,6 +150,12 @@ public class VacationController {
             Link
                 .of("/vacations/" + resource.getId() + "/confirmused")
                 .withRel("confirmused")
+        );
+
+        model.add(
+            Link
+                .of("/vacations/" + resource.getId() + "/update")
+                .withRel("update")
         );
 
         model.add(

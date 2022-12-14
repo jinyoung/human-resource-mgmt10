@@ -10,11 +10,6 @@ import org.axonframework.modelling.command.TargetAggregateIdentifier;
 @Data
 public class UpdateCommand {
 
-    private String id; // Please comment here if you want user to enter the id directly
-    private Date startDate;
-    private Date endDate;
-    private String reason;
-    private String userId;
-    private Integer days;
-    private String status;
+    @TargetAggregateIdentifier
+    private String id;
 }
