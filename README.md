@@ -13,22 +13,21 @@ docker-compose up
 ```
 cd common-api
 mvn clean install
-cd ..
 ```
 
 - Run each service
 ```
+# new terminal
 cd vacation
 mvn clean spring-boot:run
-cd ..
 
+# new terminal
 cd schedule
 mvn clean spring-boot:run
-cd ..
 
+# new terminal
 cd employee
 mvn clean spring-boot:run
-cd ..
 
 ```
 
@@ -36,7 +35,6 @@ cd ..
 ```
 cd gateway
 mvn clean spring-boot:run
-cd ..
 ```
 
 - Run frontend server
