@@ -49,18 +49,20 @@ npm run serve
 Head to http://localhost:8088 with a web browser
 
 ## Test Rest APIs
-- vacation
 ```
- http :8088/vacations id="id" startDate="startDate" endDate="endDate" reason="reason" userId="userId" days="days" status="status" 
- http :8088/vacationDaysLefts userId="userId" dayCount="dayCount" 
-```
-- schedule
-```
- http :8088/calendars userId="userId" events="events" 
-```
-- employee
-```
- http :8088/employees userId="userId" name="name" email="email" 
+http :8088/employees userId="userId2" name="name" email="email" 
+http :8088/vacationDaysStatuses  # 10
+
+http :8088/vacations userId="userId2" reason="important reason" days=3
+http :8088/vacations/{ID}  # ISSUED
+http :8088/vacationDaysStatuses # 7
+
+http PUT :8088/vacations/{ID}/approve  # APPROVED
+
+http :8088/vacations userId="userId2" reason="important reason" days=10
+http :8088/vacations/{ID}  # REJECTED
+http :8088/vacationDaysStatuses # 7
+
 ```
 
 ## Test RSocket APIs
