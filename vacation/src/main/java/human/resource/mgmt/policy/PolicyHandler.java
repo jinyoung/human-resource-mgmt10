@@ -73,4 +73,16 @@ public class PolicyHandler {
         command.setUserId(employeeJoined.getUserId()+ "_cal");
         commandGateway.send(command);
     }
+
+    @EventHandler
+    //@DisallowReplay
+    public void wheneverVacationDaysInsufficient_Update(
+        VacationDaysInsufficientEvent vacationDaysInsufficient
+    ) {
+        System.out.println(vacationDaysInsufficient.toString());
+
+        UpdateCommand command = new UpdateCommand();
+        //TODO: mapping attributes (anti-corruption)
+        commandGateway.send(command);
+    }
 }
