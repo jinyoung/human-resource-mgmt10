@@ -80,3 +80,145 @@ java -jar rsc.jar --stream  --route schedules.all ws://localhost:8088/rsocket/sc
 java -jar rsc.jar --stream  --route employees.all ws://localhost:8088/rsocket/employees
 
 ```
+
+# Implementation Details
+
+## VacationAggregate
+
+```
+    @EventSourcingHandler
+    public void on(VacationRegisteredEvent event) {
+        BeanUtils.copyProperties(event, this);
+        setStatus("ISSUED");
+    }
+
+    @EventSourcingHandler
+    public void on(VacationCancelledEvent event) {
+        setStatus("CANCELLED");
+    }
+
+    @EventSourcingHandler
+    public void on(VacationApprovedEvent event) {
+        setStatus("APPROVED");
+
+    }
+
+    @EventSourcingHandler
+    public void on(VacationRejectedEvent event) {
+        setStatus("REJECTED");
+    }
+
+    @EventSourcingHandler
+    public void on(VacationUsedEvent event) {
+        setStatus("USED");
+
+    }
+```
+
+## Vacation Policy
+
+```
+    @EventHandler
+    //@DisallowReplay
+    public void wheneverVacationRegistered_Use(
+        VacationRegisteredEvent vacationRegistered
+    ) {
+        System.out.println(vacationRegistered.toString());
+
+        UseCommand command = new UseCommand();
+        command.setDayCount(vacationRegistered.getDays());
+        command.setUserId(vacationRegistered.getUserId() + "_cal");
+        command.setReason(vacationRegistered.getReason());
+        //TODO: mapping attributes (anti-corruption)
+        commandGateway.send(command);
+    }
+
+    @EventHandler
+    //@DisallowReplay
+    public void wheneverVacationCancelled_Add(
+        VacationCancelledEvent vacationCancelled
+    ) {
+        System.out.println(vacationCancelled.toString());
+
+        AddCommand command = new AddCommand();
+        //TODO: mapping attributes (anti-corruption)
+        commandGateway.send(command);
+    }
+
+    @EventHandler
+    //@DisallowReplay
+    public void wheneverVacationRejected_Add(
+        VacationRejectedEvent vacationRejected
+    ) {
+        System.out.println(vacationRejected.toString());
+
+        AddCommand command = new AddCommand();
+        //TODO: mapping attributes (anti-corruption)
+        commandGateway.send(command);
+    }
+
+    @EventHandler
+    //@DisallowReplay
+    public void wheneverEmployeeJoined_RegisterUser(
+        EmployeeJoinedEvent employeeJoined
+    ) {
+        System.out.println(employeeJoined.toString());
+
+        RegisterUserCommand command = new RegisterUserCommand();
+        //TODO: mapping attributes (anti-corruption)
+        command.setUserId(employeeJoined.getUserId()+ "_cal");
+        commandGateway.send(command);
+    }
+```
+
+## Vacation Days Aggregate
+
+```
+    @CommandHandler
+    public void handle(UseCommand command) {
+
+        if(getDayCount() < command.getDayCount()){
+            VacationDaysInsufficientEvent event = new VacationDaysInsufficientEvent();
+            event.setVacationId(command.getVacationId());
+            apply(event);
+
+        }else{
+
+            VacationDaysUsedEvent event = new VacationDaysUsedEvent();
+            BeanUtils.copyProperties(command, event);
+    
+            apply(event);
+                
+        }
+    }
+
+
+    @CommandHandler
+    public VacationDaysLeftAggregate(RegisterUserCommand command) {
+        VacationDaysIntializedEvent event = new VacationDaysIntializedEvent();
+        BeanUtils.copyProperties(command, event);
+
+        //TODO: check key generation is properly done
+        if (event.getUserId() == null) event.setUserId(createUUID());
+        
+        event.setDayCount(10);
+
+        apply(event);
+    }
+
+    private String createUUID() {
+        return UUID.randomUUID().toString();
+    }
+
+    @EventSourcingHandler
+    public void on(VacationDaysAddedEvent event) {
+        //TODO: business logic here
+        setDayCount(getDayCount() + event.getDayCount());
+    }
+
+    @EventSourcingHandler
+    public void on(VacationDaysUsedEvent event) {
+        //TODO: business logic here
+        setDayCount(getDayCount() - event.getDayCount());
+    }
+```
