@@ -103,6 +103,11 @@ public class VacationStatusQueryController {
                 .of("/vacations/" + resource.getId() + "/confirmused")
                 .withRel("confirmused")
         );
+        model.add(
+            Link
+                .of("/vacations/" + resource.getId() + "/update")
+                .withRel("update")
+        );
 
         model.add(
             Link
