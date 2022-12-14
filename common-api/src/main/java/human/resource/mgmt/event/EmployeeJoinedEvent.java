@@ -7,7 +7,6 @@ import lombok.ToString;
 @ToString
 public class EmployeeJoinedEvent {
 
-    private Long id;
     private String userId;
     private String name;
     private String email;

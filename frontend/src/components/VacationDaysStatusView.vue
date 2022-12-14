@@ -27,14 +27,18 @@
             ],
             vacationDaysStatus : [],
         }),
-          async created() {
-            var temp = await axios.get(axios.fixUrl('/vacationDaysStatuses'))
-
-            temp.data._embedded.vacationDaysStatuses.map(obj => obj.id=obj._links.self.href.split("/")[obj._links.self.href.split("/").length - 1])
-
-            this.vacationDaysStatus = temp.data._embedded.vacationDaysStatuses;
+        async created() {
+            var me = this;
+            setInterval(function(){me.load()}, 1000);
         },
         methods: {
+            async load() {
+                var temp = await axios.get(axios.fixUrl('/vacationDaysStatuses'))
+
+                temp.data._embedded.vacationDaysStatuses.map(obj => obj.id=obj._links.self.href.split("/")[obj._links.self.href.split("/").length - 1])
+
+                this.vacationDaysStatus = temp.data._embedded.vacationDaysStatuses;
+            }
         }
     }
 </script>

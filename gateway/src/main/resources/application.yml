@@ -12,7 +12,7 @@ spring:
         - id: vacation
           uri: http://localhost:8081
           predicates:
-            - Path=/vacations/**, /vacationDaysLefts/**, /vacationDaysStatuses/**, /vacationStatuses/**
+            - Path=/vacations/**, /vacationDaysLefts/**, /vacationDaysStatuses/**, /vacationStatuses/**, /vacationDaysLefts/**
         - id: vacation_websocket
           uri: http://localhost:7081
           predicates:
@@ -64,7 +64,7 @@ spring:
         - id: vacation
           uri: http://vacation:8080
           predicates:
-            - Path=/vacations/**, /vacationDaysLefts/**, /vacationDaysStatuses/**, /vacationStatuses/**
+            - Path=/vacations/**, /vacationDaysLefts/**, /vacationDaysStatuses/**, /vacationStatuses/**, /vacationDaysLefts/**
         - id: schedule
           uri: http://schedule:8080
           predicates:
