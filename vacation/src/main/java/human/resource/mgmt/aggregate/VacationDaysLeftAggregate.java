@@ -37,10 +37,17 @@ public class VacationDaysLeftAggregate {
 
     @CommandHandler
     public void handle(UseCommand command) {
-        VacationDaysUsedEvent event = new VacationDaysUsedEvent();
-        BeanUtils.copyProperties(command, event);
 
-        apply(event);
+        if(getDayCount() < command.getDayCount()){
+
+        }else{
+
+            VacationDaysUsedEvent event = new VacationDaysUsedEvent();
+            BeanUtils.copyProperties(command, event);
+    
+            apply(event);
+                
+        }
     }
 
     @CommandHandler
@@ -63,13 +70,13 @@ public class VacationDaysLeftAggregate {
     @EventSourcingHandler
     public void on(VacationDaysAddedEvent event) {
         //TODO: business logic here
-
+        setDayCount(getDayCount() + event.getDayCount());
     }
 
     @EventSourcingHandler
     public void on(VacationDaysUsedEvent event) {
         //TODO: business logic here
-
+        setDayCount(getDayCount() - event.getDayCount());
     }
 
     @EventSourcingHandler
