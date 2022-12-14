@@ -14,4 +14,5 @@ public class UseCommand {
 
     private Integer dayCount;
     private String reason;
+    private String vacationId;
 }
