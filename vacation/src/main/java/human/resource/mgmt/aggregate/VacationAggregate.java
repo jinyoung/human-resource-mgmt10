@@ -38,7 +38,8 @@ public class VacationAggregate {
         VacationRegisteredEvent event = new VacationRegisteredEvent();
         BeanUtils.copyProperties(command, event);
 
-        event.setId(createUUID());
+        //TODO: check key generation is properly done
+        if (event.getId() == null) event.setId(createUUID());
 
         apply(event);
     }

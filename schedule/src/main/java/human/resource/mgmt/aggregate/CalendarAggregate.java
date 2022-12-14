@@ -48,7 +48,8 @@ public class CalendarAggregate {
         CalendarRegisteredEvent event = new CalendarRegisteredEvent();
         BeanUtils.copyProperties(command, event);
 
-        event.setUserId(createUUID());
+        //TODO: check key generation is properly done
+        if (event.getUserId() == null) event.setUserId(createUUID());
 
         apply(event);
     }

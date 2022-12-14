@@ -6,7 +6,7 @@ package human.resource.mgmt.query;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-//@RepositoryRestResource(path = "vacationStatuses", collectionResourceRel = "vacationStatuses")
+//@RepositoryRestResource(path = "vacationDaysLefts", collectionResourceRel = "vacationDaysLefts")
 public interface VacationReadModelRepository
     extends JpaRepository<VacationReadModel, String> {
     /*

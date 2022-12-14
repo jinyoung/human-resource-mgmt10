@@ -81,6 +81,16 @@
                     >
                         VacationStatus
                     </v-list-item>
+                    <v-list-item
+                        class="px-2"
+                        key="vacationDaysLefts"
+                        to="vacationDaysLefts"
+                        @click="changeUrl()"
+                        color="deep-purple lighten-2"
+                        style="font-weight:700;"
+                    >
+                        VacationDaysLeft
+                    </v-list-item>
 
                     <v-list-item
                         class="px-2"
@@ -255,6 +265,35 @@
                                     style="font-weight:500; font-size:20px; padding:15px;"
                                 >
                                     VacationStatus
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                        <v-card
+                            class="mx-auto"
+                            style="height:300px; width:300px; margin-bottom:20px;"
+                            outlined
+                        >
+                            <v-list-item>
+                                <v-list-item-avatar 
+                                    class="mx-auto"
+                                    size="80"
+                                    style="margin-top:80px;"
+                                ><span class="mdi mdi-apps" style="font-size:60px; color:#9575CD;"></span>
+                                </v-list-item-avatar>
+                            </v-list-item>
+
+                            <v-card-actions>
+                                <v-btn 
+                                    class="mx-auto"
+                                    outlined
+                                    rounded
+                                    key="vacationDaysLefts"
+                                    to="/vacationDaysLefts"
+                                    @click="changeUrl()"
+                                    color="deep-purple lighten-2"
+                                    style="font-weight:500; font-size:20px; padding:15px;"
+                                >
+                                    VacationDaysLeft
                                 </v-btn>
                             </v-card-actions>
                         </v-card>
