@@ -83,6 +83,7 @@ public class PolicyHandler {
 
         UpdateCommand command = new UpdateCommand();
         //TODO: mapping attributes (anti-corruption)
+        command.setId(vacationDaysInsufficient.getVacationId());
         commandGateway.send(command);
     }
 }

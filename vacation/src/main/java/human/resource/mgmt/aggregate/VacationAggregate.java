@@ -69,7 +69,9 @@ public class VacationAggregate {
     }
 
     @CommandHandler
-    public void handle(UpdateCommand command) {}
+    public void handle(UpdateCommand command) {
+        
+    }
 
     private String createUUID() {
         return UUID.randomUUID().toString();
