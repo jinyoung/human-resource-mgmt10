@@ -39,6 +39,8 @@ public class VacationDaysLeftAggregate {
     public void handle(UseCommand command) {
 
         if(getDayCount() < command.getDayCount()){
+            VacationDaysInsufficientEvent event = new VacationDaysInsufficientEvent();
+            event.setVacationId(command.get);
 
         }else{
 
