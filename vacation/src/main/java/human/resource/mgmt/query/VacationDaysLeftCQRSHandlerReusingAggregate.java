@@ -21,29 +21,73 @@ import org.springframework.stereotype.Service;
 public class VacationDaysLeftCQRSHandlerReusingAggregate {
 
     @Autowired
-    private VacationReadModelRepository repository;
+    private VacationDaysLeftReadModelRepository repository;
 
     @Autowired
     private QueryUpdateEmitter queryUpdateEmitter;
 
     @QueryHandler
-    public List<VacationReadModel> handle(VacationDaysLeftQuery query) {
+    public List<VacationDaysLeftReadModel> handle(VacationDaysLeftQuery query) {
         return repository.findAll();
     }
 
     @QueryHandler
-    public Optional<VacationReadModel> handle(
+    public Optional<VacationDaysLeftReadModel> handle(
         VacationDaysLeftSingleQuery query
     ) {
-        return repository.findById(query.getId());
+        return repository.findById(query.getUserId());
     }
 
     @EventHandler
-    public void whenVacationRegistered_then_CREATE(
-        VacationRegisteredEvent event
+    public void whenVacationDaysAdded_then_UPDATE(VacationDaysAddedEvent event)
+        throws Exception {
+        repository
+            .findById(event.getUserId())
+            .ifPresent(entity -> {
+                VacationDaysLeftAggregate aggregate = new VacationDaysLeftAggregate();
+
+                BeanUtils.copyProperties(entity, aggregate);
+                aggregate.on(event);
+                BeanUtils.copyProperties(aggregate, entity);
+
+                repository.save(entity);
+
+                queryUpdateEmitter.emit(
+                    VacationDaysLeftSingleQuery.class,
+                    query -> query.getUserId().equals(event.getUserId()),
+                    entity
+                );
+            });
+    }
+
+    @EventHandler
+    public void whenVacationDaysUsed_then_UPDATE(VacationDaysUsedEvent event)
+        throws Exception {
+        repository
+            .findById(event.getUserId())
+            .ifPresent(entity -> {
+                VacationDaysLeftAggregate aggregate = new VacationDaysLeftAggregate();
+
+                BeanUtils.copyProperties(entity, aggregate);
+                aggregate.on(event);
+                BeanUtils.copyProperties(aggregate, entity);
+
+                repository.save(entity);
+
+                queryUpdateEmitter.emit(
+                    VacationDaysLeftSingleQuery.class,
+                    query -> query.getUserId().equals(event.getUserId()),
+                    entity
+                );
+            });
+    }
+
+    @EventHandler
+    public void whenVacationDaysIntialized_then_CREATE(
+        VacationDaysIntializedEvent event
     ) throws Exception {
-        VacationReadModel entity = new VacationReadModel();
-        VacationAggregate aggregate = new VacationAggregate();
+        VacationDaysLeftReadModel entity = new VacationDaysLeftReadModel();
+        VacationDaysLeftAggregate aggregate = new VacationDaysLeftAggregate();
         aggregate.on(event);
 
         BeanUtils.copyProperties(aggregate, entity);
@@ -55,93 +99,5 @@ public class VacationDaysLeftCQRSHandlerReusingAggregate {
             query -> true,
             entity
         );
-    }
-
-    @EventHandler
-    public void whenVacationCancelled_then_UPDATE(VacationCancelledEvent event)
-        throws Exception {
-        repository
-            .findById(event.getId())
-            .ifPresent(entity -> {
-                VacationAggregate aggregate = new VacationAggregate();
-
-                BeanUtils.copyProperties(entity, aggregate);
-                aggregate.on(event);
-                BeanUtils.copyProperties(aggregate, entity);
-
-                repository.save(entity);
-
-                queryUpdateEmitter.emit(
-                    VacationDaysLeftSingleQuery.class,
-                    query -> query.getId().equals(event.getId()),
-                    entity
-                );
-            });
-    }
-
-    @EventHandler
-    public void whenVacationApproved_then_UPDATE(VacationApprovedEvent event)
-        throws Exception {
-        repository
-            .findById(event.getId())
-            .ifPresent(entity -> {
-                VacationAggregate aggregate = new VacationAggregate();
-
-                BeanUtils.copyProperties(entity, aggregate);
-                aggregate.on(event);
-                BeanUtils.copyProperties(aggregate, entity);
-
-                repository.save(entity);
-
-                queryUpdateEmitter.emit(
-                    VacationDaysLeftSingleQuery.class,
-                    query -> query.getId().equals(event.getId()),
-                    entity
-                );
-            });
-    }
-
-    @EventHandler
-    public void whenVacationRejected_then_UPDATE(VacationRejectedEvent event)
-        throws Exception {
-        repository
-            .findById(event.getId())
-            .ifPresent(entity -> {
-                VacationAggregate aggregate = new VacationAggregate();
-
-                BeanUtils.copyProperties(entity, aggregate);
-                aggregate.on(event);
-                BeanUtils.copyProperties(aggregate, entity);
-
-                repository.save(entity);
-
-                queryUpdateEmitter.emit(
-                    VacationDaysLeftSingleQuery.class,
-                    query -> query.getId().equals(event.getId()),
-                    entity
-                );
-            });
-    }
-
-    @EventHandler
-    public void whenVacationUsed_then_UPDATE(VacationUsedEvent event)
-        throws Exception {
-        repository
-            .findById(event.getId())
-            .ifPresent(entity -> {
-                VacationAggregate aggregate = new VacationAggregate();
-
-                BeanUtils.copyProperties(entity, aggregate);
-                aggregate.on(event);
-                BeanUtils.copyProperties(aggregate, entity);
-
-                repository.save(entity);
-
-                queryUpdateEmitter.emit(
-                    VacationDaysLeftSingleQuery.class,
-                    query -> query.getId().equals(event.getId()),
-                    entity
-                );
-            });
     }
 }

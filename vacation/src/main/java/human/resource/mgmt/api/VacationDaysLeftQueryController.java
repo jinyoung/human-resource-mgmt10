@@ -34,15 +34,17 @@ public class VacationDaysLeftQueryController {
         this.reactorQueryGateway = reactorQueryGateway;
     }
 
-    @GetMapping("/vacations")
+    @GetMapping("/vacationDaysLefts")
     public CompletableFuture findAll(VacationDaysLeftQuery query) {
         return queryGateway
             .query(
                 query,
-                ResponseTypes.multipleInstancesOf(VacationReadModel.class)
+                ResponseTypes.multipleInstancesOf(
+                    VacationDaysLeftReadModel.class
+                )
             )
             .thenApply(resources -> {
-                List modelList = new ArrayList<EntityModel<VacationReadModel>>();
+                List modelList = new ArrayList<EntityModel<VacationDaysLeftReadModel>>();
 
                 resources
                     .stream()
@@ -50,7 +52,7 @@ public class VacationDaysLeftQueryController {
                         modelList.add(hateoas(resource));
                     });
 
-                CollectionModel<VacationReadModel> model = CollectionModel.of(
+                CollectionModel<VacationDaysLeftReadModel> model = CollectionModel.of(
                     modelList
                 );
 
@@ -58,15 +60,17 @@ public class VacationDaysLeftQueryController {
             });
     }
 
-    @GetMapping("/vacations/{id}")
+    @GetMapping("/vacationDaysLefts/{id}")
     public CompletableFuture findById(@PathVariable("id") String id) {
         VacationDaysLeftSingleQuery query = new VacationDaysLeftSingleQuery();
-        query.setId(id);
+        query.setUserId(id);
 
         return queryGateway
             .query(
                 query,
-                ResponseTypes.optionalInstanceOf(VacationReadModel.class)
+                ResponseTypes.optionalInstanceOf(
+                    VacationDaysLeftReadModel.class
+                )
             )
             .thenApply(resource -> {
                 if (!resource.isPresent()) {
@@ -83,54 +87,53 @@ public class VacationDaysLeftQueryController {
             });
     }
 
-    EntityModel<VacationReadModel> hateoas(VacationReadModel resource) {
-        EntityModel<VacationReadModel> model = EntityModel.of(resource);
+    EntityModel<VacationDaysLeftReadModel> hateoas(
+        VacationDaysLeftReadModel resource
+    ) {
+        EntityModel<VacationDaysLeftReadModel> model = EntityModel.of(resource);
 
-        model.add(Link.of("/vacations/" + resource.getId()).withSelfRel());
-
         model.add(
-            Link
-                .of("/vacations/" + resource.getId() + "/cancel")
-                .withRel("cancel")
-        );
-        model.add(
-            Link
-                .of("/vacations/" + resource.getId() + "/approve")
-                .withRel("approve")
-        );
-        model.add(
-            Link
-                .of("/vacations/" + resource.getId() + "/confirmused")
-                .withRel("confirmused")
+            Link.of("/vacationDaysLefts/" + resource.getUserId()).withSelfRel()
         );
 
         model.add(
             Link
-                .of("/vacations/" + resource.getId() + "/events")
+                .of("/vacationDaysLefts/" + resource.getUserId() + "/add")
+                .withRel("add")
+        );
+        model.add(
+            Link
+                .of("/vacationDaysLefts/" + resource.getUserId() + "/use")
+                .withRel("use")
+        );
+
+        model.add(
+            Link
+                .of("/vacationDaysLefts/" + resource.getUserId() + "/events")
                 .withRel("events")
         );
 
         return model;
     }
 
-    @MessageMapping("vacations.all")
-    public Flux<VacationReadModel> subscribeAll() {
+    @MessageMapping("vacationDaysLefts.all")
+    public Flux<VacationDaysLeftReadModel> subscribeAll() {
         return reactorQueryGateway.subscriptionQueryMany(
             new VacationDaysLeftQuery(),
-            VacationReadModel.class
+            VacationDaysLeftReadModel.class
         );
     }
 
-    @MessageMapping("vacations.{id}.get")
-    public Flux<VacationReadModel> subscribeSingle(
+    @MessageMapping("vacationDaysLefts.{id}.get")
+    public Flux<VacationDaysLeftReadModel> subscribeSingle(
         @DestinationVariable String id
     ) {
         VacationDaysLeftSingleQuery query = new VacationDaysLeftSingleQuery();
-        query.setId(id);
+        query.setUserId(id);
 
         return reactorQueryGateway.subscriptionQuery(
             query,
-            VacationReadModel.class
+            VacationDaysLeftReadModel.class
         );
     }
 }
