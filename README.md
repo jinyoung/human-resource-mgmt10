@@ -9,11 +9,15 @@ docker-compose up
 
 ## Build common API & Run each service
 
-'''
+- Build common API
+```
 cd common-api
 mvn clean install
 cd ..
+```
 
+- Run each service
+```
 cd vacation
 mvn clean spring-boot:run
 cd ..
@@ -26,22 +30,40 @@ cd employee
 mvn clean spring-boot:run
 cd ..
 
+```
 
+- Run API gateway
+```
 cd gateway
 mvn clean spring-boot:run
 cd ..
+```
 
+- Run frontend server
+```
 cd frontend
 npm i
 npm run serve
 
-'''
+```
 
 ## Test By UI
 Head to http://localhost:8088 with a web browser
 
 ## Test Rest APIs
-
+- vacation
+```
+ http :8088/vacations id="id" startDate="startDate" endDate="endDate" reason="reason" userId="userId" days="days" status="status" 
+ http :8088/vacationDaysLefts userId="userId" dayCount="dayCount" 
+```
+- schedule
+```
+ http :8088/calendars userId="userId" events="events" 
+```
+- employee
+```
+ http :8088/employees userId="userId" name="name" email="email" 
+```
 
 ## Test RSocket APIs
 
