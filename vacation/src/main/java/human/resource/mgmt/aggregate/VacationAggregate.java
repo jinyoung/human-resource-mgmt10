@@ -74,28 +74,20 @@ public class VacationAggregate {
     @EventSourcingHandler
     public void on(VacationRegisteredEvent event) {
         BeanUtils.copyProperties(event, this);
+        //TODO: business logic here
+
         setStatus("ISSUED");
     }
 
     @EventSourcingHandler
-    public void on(VacationCancelledEvent event) {
-        setStatus("CANCELLED");
-    }
+    public void on(VacationCancelledEvent event) {}
 
     @EventSourcingHandler
-    public void on(VacationApprovedEvent event) {
-        setStatus("APPROVED");
-
-    }
+    public void on(VacationApprovedEvent event) {}
 
     @EventSourcingHandler
-    public void on(VacationRejectedEvent event) {
-        setStatus("REJECTED");
-    }
+    public void on(VacationRejectedEvent event) {}
 
     @EventSourcingHandler
-    public void on(VacationUsedEvent event) {
-        setStatus("USED");
-
-    }
+    public void on(VacationUsedEvent event) {}
 }
