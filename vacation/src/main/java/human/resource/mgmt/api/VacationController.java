@@ -100,6 +100,24 @@ public class VacationController {
         return commandGateway.send(confirmUsedCommand);
     }
 
+    @RequestMapping(value = "/vacations", method = RequestMethod.POST)
+    public CompletableFuture update(@RequestBody UpdateCommand updateCommand)
+        throws Exception {
+        System.out.println("##### /vacation/update  called #####");
+
+        // send command
+        return commandGateway
+            .send(updateCommand)
+            .thenApply(id -> {
+                VacationAggregate resource = new VacationAggregate();
+                BeanUtils.copyProperties(updateCommand, resource);
+
+                resource.setId((String) id);
+
+                return new ResponseEntity<>(hateoas(resource), HttpStatus.OK);
+            });
+    }
+
     @Autowired
     EventStore eventStore;
 

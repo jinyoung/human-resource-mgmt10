@@ -48,6 +48,7 @@
                     v-else
             >
                 RegisterVacation
+                Update
             </v-btn>
             <v-btn
                     color="deep-purple lighten-2"
