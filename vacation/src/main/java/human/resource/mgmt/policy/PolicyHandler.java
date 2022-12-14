@@ -30,10 +30,13 @@ public class PolicyHandler {
         System.out.println(vacationRegistered.toString());
 
         UseCommand command = new UseCommand();
+        //TODO: mapping attributes (anti-corruption)
+
         command.setDayCount(vacationRegistered.getDays());
         command.setUserId(vacationRegistered.getUserId() + "_cal");
         command.setReason(vacationRegistered.getReason());
-        //TODO: mapping attributes (anti-corruption)
+        //
+        command.setVacationId(vacationRegistered.getId());
         commandGateway.send(command);
     }
 

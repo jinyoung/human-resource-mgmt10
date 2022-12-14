@@ -101,26 +101,26 @@ public class VacationDaysLeftCQRSHandlerReusingAggregate {
         );
     }
 
-    @EventHandler
-    public void whenVacationDaysInsufficient_then_UPDATE(
-        VacationDaysInsufficientEvent event
-    ) throws Exception {
-        repository
-            .findById(event.getUserId())
-            .ifPresent(entity -> {
-                VacationDaysLeftAggregate aggregate = new VacationDaysLeftAggregate();
+    // @EventHandler
+    // public void whenVacationDaysInsufficient_then_UPDATE(
+    //     VacationDaysInsufficientEvent event
+    // ) throws Exception {
+    //     repository
+    //         .findById(event.getUserId())
+    //         .ifPresent(entity -> {
+    //             VacationDaysLeftAggregate aggregate = new VacationDaysLeftAggregate();
 
-                BeanUtils.copyProperties(entity, aggregate);
-                aggregate.on(event);
-                BeanUtils.copyProperties(aggregate, entity);
+    //             BeanUtils.copyProperties(entity, aggregate);
+    //             aggregate.on(event);
+    //             BeanUtils.copyProperties(aggregate, entity);
 
-                repository.save(entity);
+    //             repository.save(entity);
 
-                queryUpdateEmitter.emit(
-                    VacationDaysLeftSingleQuery.class,
-                    query -> query.getUserId().equals(event.getUserId()),
-                    entity
-                );
-            });
-    }
+    //             queryUpdateEmitter.emit(
+    //                 VacationDaysLeftSingleQuery.class,
+    //                 query -> query.getUserId().equals(event.getUserId()),
+    //                 entity
+    //             );
+    //         });
+    // }
 }
